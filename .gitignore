@@ -1,3 +1,6 @@
+# Dependencies
+node_modules/
+
 # Logs
 logs
 *.log
@@ -7,18 +10,57 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build output
+dist/
+dist-ssr/
+build/
+out/
 
-# Editor directories and files
-.vscode/*
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+
+# Editor / IDE
+.vscode/
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.AppleDouble
+.LSOverride
+
+# Temp files
+tmp/
+temp/
+
+# Optional caches
+.npm
+.eslintcache
+
+# Database files (if any)
+data/
+*.db
+*.sqlite
+
+# Misc
+*.tgz
+*.local
