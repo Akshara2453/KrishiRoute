@@ -1,65 +1,41 @@
 const fs = require("fs");
-const csv = require("csv-parser");
 const path = require("path");
 
-const inputFile = path.join(__dirname, "../raw_data/agri.csv");
-const outputFile = path.join(__dirname, "../src/data/mandiData.json");
+async function fetchAllPages() {
+  let page = 1;
+  let totalPages = 3;
+  let mandiData = [];
+  const BASE_URL = "https://api.agmarknet.gov.in/v1/dashboard-data/";
+  const PARAMS = "?commodity=[100001]&dashboard=marketwise_price_arrival&date=2026-04-14&district=[100007]&format=json&grades=[4]&group=[100000]&limit=10&market=[100009]&state=100006&variety=100021";
+  while (page <= totalPages) {
+    const url = `${BASE_URL}${PARAMS}&page=${page}`;
 
-const results = [];
+    const res = await fetch(url);
+    const json = await res.json();
 
-fs.createReadStream(inputFile)
-  .pipe(
-    csv({
-      mapHeaders: ({ header }) =>
-        header.toLowerCase().replace(/\s+/g, "_").trim()
-    })
-  )
-  .on("data", (row) => {
-    // map actual dataset fields
-    const state = row.state_name;
-    const district = row.district_name;
-    const market = row.market_name;
-    const commodity = row.commodity;
-    const date = row.reported_date;
-
-    const price = parseFloat(row["modal_price_(rs./quintal)"]);
-
-    if (!market || !commodity || !price || price === 0) return;
-
-    results.push({
-      state: state?.trim(),
-      district: district?.trim(),
-      market: market.trim(),
-      commodity: commodity.trim(),
-      price: price,
-      date: date
-    });
-  })
-  .on("end", () => {
-    console.log("Valid rows:", results.length);
-
-    const latestMap = {};
-
-    for (const row of results) {
-      const key =
-        row.market.toLowerCase() +
-        "_" +
-        row.commodity.toLowerCase();
-
-      if (
-        !latestMap[key] ||
-        new Date(row.date) > new Date(latestMap[key].date)
-      ) {
-        latestMap[key] = row;
-      }
+    if (page === 1) {
+      totalPages = json.pagination.total_pages;
     }
 
-    const cleaned = Object.values(latestMap);
+    mandiData.push(...json.data.records);
+    page++;
+  }
 
-    fs.writeFileSync(outputFile, JSON.stringify(cleaned, null, 2));
+  return mandiData;
+}
 
-    console.log("Final processed:", cleaned.length);
-  })
-  .on("error", (err) => {
-    console.error("Error:", err);
-  });
+async function saveToFile() {
+  const mandiData = await fetchAllPages();
+
+  // build correct path
+  const filePath = path.join(__dirname, "..", "src", "data", "mandiData.json");
+
+  fs.writeFileSync(
+    filePath,
+    JSON.stringify({ mandiData }, null, 2)
+  );
+
+  console.log("Saved to src/data/mandiData.json");
+}
+
+saveToFile();
