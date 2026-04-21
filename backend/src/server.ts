@@ -3,6 +3,8 @@ dotenv.config();
 import app from "./app";
 import connectDB from "./config/db";
 
+console.log("Starting server...");
+
 connectDB();
 
 
