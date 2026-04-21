@@ -1,8 +1,9 @@
 const fs = require("fs");
 const csv = require("csv-parser");
+const path = require("path");
 
-const inputFile = "./raw_data/cities.csv";
-const outputFile = "./src/data/cityCoordinates.json";
+const inputFile = path.join(__dirname, "../raw_data/cities.csv");
+const outputFile = path.join(__dirname, "../src/data/cityCoordinates.json");
 
 const cityMap = {};
 

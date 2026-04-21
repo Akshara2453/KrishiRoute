@@ -3,7 +3,7 @@ import { fetchMandiPrices } from "../services/agmarknetService";
 import { getDistance } from "../services/distanceService";
 import { Location } from "../types";
 
-export const getNearbyMandis = async (req: Request, res: Response) => {
+export const getMandis = async (req: Request, res: Response) => {
   try {
     const {
       crop,
