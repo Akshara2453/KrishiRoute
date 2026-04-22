@@ -47,6 +47,10 @@ const cropOptions = [
 ];
 
 export default function InputForm() {
+
+  const [rideShare, setRideShare] = useState(false);
+  const [otherQuantity, setOtherQuantity] = useState(0);
+
   const [form, setForm] = useState<FormData>({
     crop: "",
     quantity: 0,
@@ -132,6 +136,8 @@ export default function InputForm() {
           lat: form.location.lat,
           lng: form.location.lng,
         },
+        rideShare,
+        otherQuantity
       });
 
       const { bestMandi, allOptions } = res.data;
@@ -218,6 +224,27 @@ export default function InputForm() {
           <option value="truck">Truck</option>
           <option value="lorry">Tata Ace</option>
         </select>
+      </div>
+      {/*added*/}
+      <div className="mb-4">
+        <label className="flex items-center gap-2 font-medium">
+          <input
+            type="checkbox"
+            checked={rideShare}
+            onChange={(e) => setRideShare(e.target.checked)}
+          />
+          Enable Ride Sharing
+        </label>
+
+        {rideShare && (
+          <input
+            type="number"
+            placeholder="Enter other farmer quantity"
+            className="w-full border p-3 rounded-lg mt-2"
+            value={otherQuantity || ""}
+            onChange={(e) => setOtherQuantity(Number(e.target.value))}
+          />
+        )}
       </div>
 
       <div className="mb-4">

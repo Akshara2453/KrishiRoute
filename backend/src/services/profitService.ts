@@ -2,6 +2,7 @@ import { fetchMandiPrices } from "./agmarknetService";
 import { getDistance } from "./distanceService";
 import { Location } from "../types";
 import { Mandi } from "../types";
+import { VEHICLE_CAPACITY } from "../config/constants";
 
 interface MarketOption {
   name: string;
@@ -26,7 +27,9 @@ export const getBestMarket = async (
   state: string,
   district: string,
   vehicle: string,
-  sourceLocation: Location
+  sourceLocation: Location,
+  rideShare: boolean = false,
+  otherQuantity: number = 0
 ) => {
   // 🔹 Fetch real mandi data
   const mandis = await fetchMandiPrices(
@@ -52,11 +55,18 @@ export const getBestMarket = async (
         m.location
       );
 
-      const transportCost = distance * ratePerKm;
+      let transportCost = distance * ratePerKm;
 
       const totalRevenue = m.price * quantity;
 
       const netProfit = totalRevenue - transportCost;
+
+      const capacity = VEHICLE_CAPACITY[vehicle] || Infinity;
+      const totalQuantity = quantity + otherQuantity;
+
+      if (rideShare && totalQuantity <= capacity) {
+        transportCost *= 0.6;
+      }
 
       return {
         name: m.name,

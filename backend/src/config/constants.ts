@@ -5,3 +5,9 @@ export const VEHICLE_RATES: Record<string, number> = {
 };
 
 export const LOADING_COST = 500;
+
+export const VEHICLE_CAPACITY: Record<string, number> = {
+  "Tata Ace": 1000,
+  "Tractor": 800,
+  "Truck": 5000
+};
