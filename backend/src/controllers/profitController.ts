@@ -21,9 +21,8 @@ export const getBestMandi = async (req: Request, res: Response) => {
       !state ||
       !district ||
       !vehicle ||
-      !sourceLocation||
-      !rideShare||
-      !otherQuantity
+      !sourceLocation
+      
     ) {
       return res.status(400).json({
         error: "Missing required parameters"
