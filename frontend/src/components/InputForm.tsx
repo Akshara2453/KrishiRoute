@@ -239,7 +239,7 @@ export default function InputForm() {
         {rideShare && (
           <input
             type="number"
-            placeholder="Enter other farmer quantity"
+            placeholder="Other farmer quantity"
             className="w-full border p-3 rounded-lg mt-2"
             value={otherQuantity || ""}
             onChange={(e) => setOtherQuantity(Number(e.target.value))}
